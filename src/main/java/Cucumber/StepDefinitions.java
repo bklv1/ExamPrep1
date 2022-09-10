@@ -1,11 +1,11 @@
 package Cucumber;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
+import io.cucumber.java.*;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -24,7 +24,6 @@ public class StepDefinitions {
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-    @After
     public void Quit(){
         driver.quit();
     }
@@ -78,5 +77,28 @@ public class StepDefinitions {
         Assertions.assertEquals(actualListOfAddresses, expectedListForAddresses);
     }
 
+
+    @Given("user enters clothes website")
+    public void user_enters_clothes_website() {
+        driver.navigate().to("http://automationpractice.com/index.php");
+    }
+    @When("user selects T-shirts")
+    public void user_selects_t_shirts() {
+        findElementWithWait(By.linkText("T-SHIRTS")).click();
+    }
+    @And("user selects Faded Short Sleeve T-shirts and clicks Add to Cart")
+    public void user_selects_faded_short_sleeve_t_shirts_and_clicks_add_to_cart() {
+        List<WebElement>element= findElementsWithWait(By.xpath("//a[@title='Faded Short Sleeve T-shirts']"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element.get(1)).perform();
+        findElementWithWait(By.xpath("//a[@title='Add to cart']")).click();
+    }
+    @Then("verify there is 1 item in your cart")
+    public void verify_there_is_item_in_your_cart() throws InterruptedException{
+        WebElement element= findElementWithWait(By.xpath("//a[@title='Proceed to checkout']/span"));
+        Thread.sleep(3000);
+        Assertions.assertEquals("Proceed to checkout", element.getText());
+        Assertions.assertTrue(element.isDisplayed());
+    }
 
 }

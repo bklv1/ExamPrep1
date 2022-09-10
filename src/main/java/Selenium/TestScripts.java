@@ -10,4 +10,5 @@ public class TestScripts extends BaseTestClass{
         page.NavigateToJoinUsPage();
         page.SelectJoinUs();
     }
+
 }
